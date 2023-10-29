@@ -20,39 +20,41 @@ const dice: string[] = [
   "NSEEHG",
 ];
 
+const rotationClasses = ['rotate-0', 'rotate-90', 'rotate-180', 'rotate-270'];
 
-const generateBoggleBoard = (): string[][] => {
-
-  
-  const boggleBoard: string[][] = [];
+const generateBoggleBoard = (): { letter: string; rotationClass: string }[][] => {
+  const boggleBoard: { letter: string; rotationClass: string }[][] = [];
   for (let row = 0; row < 4; row++) {
-      const rowLetters: string[] = [];
-      for (let col = 0; col < 4; col++) {
-          const dieIndex = Math.floor(Math.random() * dice.length);
-          const die = dice[dieIndex];
-          const letterIndex = Math.floor(Math.random() * die.length);
-          const letter = die[letterIndex];
-          rowLetters.push(letter);
-      }
-      boggleBoard.push(rowLetters);
+    const rowLetters: { letter: string; rotationClass: string }[] = [];
+    for (let col = 0; col < 4; col++) {
+      const dieIndex = Math.floor(Math.random() * dice.length);
+      const die = dice[dieIndex];
+      const letterIndex = Math.floor(Math.random() * die.length);
+      const letter = die[letterIndex];
+      const rotationClass = rotationClasses[Math.floor(Math.random() * rotationClasses.length)];
+      rowLetters.push({ letter, rotationClass });
+    }
+    boggleBoard.push(rowLetters);
   }
 
   console.log(boggleBoard);
-  return (boggleBoard);
+  return boggleBoard;
 }
 
 
 function App() {
-  const [boggleBoard, setBoggleBoard] = useState<string[][] | null>(null);
+  const [boggleBoard, setBoggleBoard] = useState<{ letter: string; rotationClass: string }[][] | null>(null);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
   const [timerRunning, setTimerRunning] = useState<boolean>(false);
+  const [gameOver, setGameOver] = useState<boolean>(false);
 
   const handleGenerateBoard = () => {
     setBoggleBoard(generateBoggleBoard());
     setMinutes(3);
     setSeconds(0);
     setTimerRunning(true);
+    setGameOver(false);
   };
 
   useEffect(() => {
@@ -60,7 +62,8 @@ function App() {
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(timer);
-          setTimerRunning(false)
+          setTimerRunning(false);
+          setGameOver(true);
         }
         else {
           setMinutes(minutes - 1);
@@ -69,6 +72,7 @@ function App() {
       } else {
         setSeconds(seconds - 1);
       }
+
     }, 1000);
 
     return () => clearInterval(timer);
@@ -78,28 +82,31 @@ function App() {
   return (
     <>
       <h1>🙉 Quiet Boggle 🙉</h1>
-      <p><em>A React App by Imp0ster</em></p>
       <hr></hr>
       <div className="card">
         <button onClick={handleGenerateBoard}>
           Boggle!
         </button>
-        <div className="boggle-board">
+        <div className={`boggle-board ${gameOver ? 'blur' : ''}`}>
           {boggleBoard && boggleBoard.map((row, rowIndex) => (
             <div key={rowIndex} className="row">
               {row.map((letter, colIndex) => (
-                <div key={colIndex} className="cell">
-                  {letter}
+                <div key={colIndex} className={`cell ${letter.rotationClass}`}>
+                  {letter.letter}
                 </div>
               ))}
             </div>
           ))}
         </div>
 
-
         {timerRunning && (
           <div className="timer">
-            {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
+            <h3>{`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}</h3>
+          </div>
+        )}
+        {boggleBoard && gameOver && (
+          <div className="game-over">
+            <h2>Game Over</h2>
           </div>
         )}
       </div>

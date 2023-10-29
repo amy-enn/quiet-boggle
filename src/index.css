@@ -24,6 +24,10 @@ button {
   cursor: pointer;
 }
 
+hr {
+  margin-bottom: 20px;
+}
+
 .boggle-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -43,11 +47,26 @@ button {
   cursor: pointer;
 }
 
+.blur {
+  filter: blur(3px);
+}
 
+/* Rotation rules */
 
+.rotate-0 {
+  transform: rotate(0deg);
+}
 
+.rotate-90 {
+  transform: rotate(90deg);
+}
 
+.rotate-180 {
+  transform: rotate(180deg);
+}
 
-
+.rotate-270 {
+  transform: rotate(270deg);
+}
 
 
