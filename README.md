@@ -1,6 +1,6 @@
 # Quiet Boggle
 
-![Quiet Boggle](quiet-boggle.png)
+![Quiet Boggle](./src/assets/quietboggle.gif)
 
 ## Description
 
@@ -31,6 +31,8 @@ To play the game, follow these steps:
 ```
 npm run dev
 ```
+
+5. Navigate to localhost:5173 in your browser.
 
 ## How to Play
 
