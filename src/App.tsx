@@ -81,7 +81,8 @@ function App() {
 
   return (
     <>
-      <h1>🙉 Quiet Boggle 🙉</h1>
+      <h1>Quiet Boggle</h1>
+      <h2>🙉</h2>
       <hr></hr>
       <div className="card">
         <button onClick={handleGenerateBoard}>
